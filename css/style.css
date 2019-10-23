@@ -131,6 +131,23 @@ select {
   font-size: 1rem;
 }
 
+/*  ADDED STYLES */
+/* ========================================= */
+.error {
+  background-color: rgb(248, 157, 157);
+}
+
+.label-error {
+  color: red;
+  font-weight: bold;
+}
+
+button:disabled {
+  background-color: #6f9ddc;
+  opacity: 0.2;
+  cursor: default;
+}
+
 /* ================================= 
   Page Styles
 ==================================== */
