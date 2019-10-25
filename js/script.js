@@ -194,19 +194,29 @@ function ccListener() {
 
 // =======================================================================
 function checkboxListener() {
-  const activities = document.querySelector("input[type=checkbox]");
-  let y = 0;
-  // only addresses first checkbox... need all of them
-  activities.addEventListener("change", event => {
-    if (event.target.checked) {
-      console.log("CHECKED!");
-    } else {
-      console.log("NOPE!");
-    }
-    let x = event.target.querySelector("data-cost");
-    y += x;
-    console.log(event.target);
-  });
+  let check = document.querySelectorAll("input");
+
+  for (let i = 0; i < 7; i++) {
+    check[i].addEventListener("click", event => {
+      cost = document
+        .getElementsByTagName("input")
+        [i].getAttribute("data-cost");
+
+      console.log(cost);
+
+      // strip dollar sign
+      // accumulate and de-accumulate values with += and -=
+      // show values in the insertion div
+      // use string literal to drop the amount behind
+      // a dollar sign
+    });
+  }
+  // ****  INSERTION DIV
+  document.querySelector(".activities").insertAdjacentHTML(
+    "afterend",
+    `<p>Hello there wonderful human!</p>
+    <p>This is where the total will go.</p>`
+  );
 }
 
 // =======================================================================
