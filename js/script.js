@@ -194,28 +194,30 @@ function ccListener() {
 
 // =======================================================================
 function checkboxListener() {
-  let check = document.querySelectorAll("input");
+  let checkState = document.querySelectorAll("input");
 
   for (let i = 0; i < 7; i++) {
-    check[i].addEventListener("click", event => {
-      cost = document
+    checkState[i].addEventListener("click", event => {
+      costString = document
         .getElementsByTagName("input")
         [i].getAttribute("data-cost");
-
+      let cost = parseInt(costString.substring(1));
+      cost += cost;
       console.log(cost);
 
-      // strip dollar sign
       // accumulate and de-accumulate values with += and -=
       // show values in the insertion div
       // use string literal to drop the amount behind
       // a dollar sign
     });
   }
+  let testvalue = 14;
   // ****  INSERTION DIV
   document.querySelector(".activities").insertAdjacentHTML(
     "afterend",
     `<p>Hello there wonderful human!</p>
-    <p>This is where the total will go.</p>`
+    <p>This is where the total will go.</p>
+    <p>Total: $${testvalue}</p>`
   );
 }
 
@@ -251,9 +253,10 @@ Form cannot be submitted if
   email is bad or blank
   at least one activity is checked
   If CC is up
-    CC# is a 13-16 digit number
-    zip is a 5 digit number
-    CVV is a 3 digit number
+    CC# is a 13-16 digit number - Regex for 13-16 numbers 
+    -                             ^[0-9]{13,16}$ or ^\d{13,16}$
+    zip is a 5 digit number - Regex for 5 numbers ^[0-9]{5}$ or ^\d{5}$
+    CVV is a 3 digit number - Regex for 3 numbers ^[0-9]{3}$ or ^\d{3}$
 
 ERROR on Submit for:
   Name
