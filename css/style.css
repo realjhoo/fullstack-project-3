@@ -134,7 +134,7 @@ select {
 /*  ADDED STYLES */
 /* ========================================= */
 .error {
-  background-color: rgb(248, 157, 157);
+  background-color: lightcoral;
 }
 
 .label-error {

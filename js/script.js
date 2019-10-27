@@ -5,7 +5,6 @@ const colorSelect = document.getElementById("colors-js-puns");
 const otherTitle = document.getElementById("other-title");
 const idPayment = document.getElementById("payment");
 const creditCard = document.getElementById("credit-card");
-const email = document.getElementById("mail");
 
 // =======================================================================
 function initializePage() {
@@ -41,6 +40,7 @@ function validateName() {
 
 // =======================================================================
 function validateEmail() {
+  const email = document.getElementById("mail");
   // returns true or false
   // \S = any char except whitespace + @ + any char + . + any char
 
@@ -82,6 +82,9 @@ function validateCC() {
   const selectedPayment = idPayment.selectedIndex;
   const errormsg = document.getElementById("payment").previousElementSibling
     .previousElementSibling;
+  const cardNumberError = document.querySelector("[for=cc-num]");
+  const zipCodeError = document.querySelector("[for=zip]");
+  const cvvError = document.querySelector("[for=cvv]");
 
   // is credit card  selected?
   if (selectedPayment === creditCard) {
@@ -92,9 +95,11 @@ function validateCC() {
     if (ccIsValid) {
       ccNum.style.borderColor = "#6f9ddc";
       ccNum.className -= "error";
+      cardNumberError.innerText = "Card Number:";
     } else {
       ccNum.style.borderColor = "lightcoral";
       ccNum.className += "error";
+      cardNumberError.innerHTML = `Card Number: <span class="label-error">Enter card number</span>`;
     }
 
     // validate the zip code
@@ -104,9 +109,11 @@ function validateCC() {
     if (zipIsValid) {
       zip.style.borderColor = "#6f9ddc";
       zip.className -= "error";
+      zipCodeError.innerText = "Zip Code:";
     } else {
       zip.style.borderColor = "lightcoral";
       zip.className += "error";
+      zipCodeError.innerHTML = `Zip Code: <span class="label-error">Error!</span>`;
     }
     // validate the CVV
     const cvv = document.getElementById("cvv");
@@ -115,9 +122,11 @@ function validateCC() {
     if (cvvIsValid) {
       cvv.style.borderColor = "#6f9ddc";
       cvv.className -= "error";
+      cvvError.innerText = "CVV:";
     } else {
       cvv.style.borderColor = "lightcoral";
       cvv.className += "error";
+      cvvError.innerHTML = `CVV: <span class="label-error">Enter CVV</span>`;
     }
 
     // return validity state
@@ -125,7 +134,7 @@ function validateCC() {
       errormsg.innerHTML = `Payment Info`;
       return true;
     } else {
-      errormsg.innerHTML = `Payment Info <span class="label-error">* * * Please enter correct credit card information * * *</span>`;
+      errormsg.innerHTML = `Payment Info <span class="label-error">Please enter correct credit card information</span>`;
       return false;
     }
   } else {
@@ -136,17 +145,43 @@ function validateCC() {
 
 // =======================================================================
 function validateForm() {
+  const nameInput = document.getElementById("name");
+  const nameError = document.querySelector("[for=name]");
+  const nameResetMsg = "Name:";
+  const nameErrorMsg = `Name: <span class="label-error"> Please enter a name</span>`;
+  const email = document.getElementById("mail");
+  const emailError = document.querySelector("[for=mail]");
+  const emailResetMsg = "Email:";
+  const emailErrorMsg = `Email: <span class="label-error">Please enter a valid email</span>`;
+  const emailBlankMsg = `Email: <span class="label-error">You have to type something</span>`;
+
   // name isnt blank
   let nameIsValid = validateName();
+  if (nameIsValid) {
+    setIndicators(true, nameInput, nameError, nameResetMsg);
+  } else {
+    setIndicators(false, nameInput, nameError, nameErrorMsg);
+  }
 
   // validate email
   let emailIsValid = validateEmail();
-
   if (emailIsValid) {
-    setIndicators(true, email);
+    setIndicators(true, email, emailError, emailResetMsg);
   } else {
-    setIndicators(false, email);
+    if (email.value.length === 0) {
+      setIndicators(false, email, emailError, emailBlankMsg);
+    } else {
+      setIndicators(false, email, emailError, emailErrorMsg);
+    }
   }
+
+  // EMAIL ISNT BLANK
+  // if (email.value.length === 0) { && email.value.length != 0
+  //   console.log("You didnt type nothing");
+  //   setIndicators(true, email, emailError, emailResetMsg);
+  // } else {
+  //   ;
+  // }
 
   // user has selected an activity
   let activityIsValid = validateActivity();
@@ -167,11 +202,13 @@ function validateForm() {
 function setIndicators(validity, element, msgElement, msg) {
   if (validity === true) {
     element.style.borderColor = "#6f9ddc";
-    element.className -= "error";
+    // element.className -= "error";
+    element.classList.remove("error");
     msgElement.innerHTML = msg;
   } else {
     element.style.borderColor = "lightcoral";
-    element.className += "error";
+    // element.className += "error";
+    element.classList.add("error");
     msgElement.innerHTML = msg; // <-- THIS LINE CAUSES ERROR. Why tho?
   }
 }
@@ -199,11 +236,11 @@ function nameListener() {
   nameInput.addEventListener("blur", event => {
     let nameIsValid = validateName();
 
-    if (nameIsValid) {
-      setIndicators(true, event.target, nameError, resetMsg);
-    } else {
-      setIndicators(false, event.target, nameError, errorMsg);
-    }
+    // if (nameIsValid) {
+    //   setIndicators(true, event.target, nameError, resetMsg);
+    // } else {
+    //   setIndicators(false, event.target, nameError, errorMsg);
+    // }
 
     // ******** ERROR HANDLING ************
     // if (nameIsValid || name === "") {
@@ -223,18 +260,30 @@ function nameListener() {
 function emailListener() {
   // email event listener - live validation
   const emailInput = document.getElementById("mail");
+
   const emailError = document.querySelector("[for=mail]");
+  const email = document.getElementById("mail");
+  // const emailError = document.querySelector("[for=mail]");
+  const emailResetMsg = "Email:";
+  const emailErrorMsg = `Email: <span class="label-error">Please enter a valid email</span>`;
 
   emailInput.addEventListener("keyup", event => {
     let emailIsValid = validateEmail();
+    console.log(emailIsValid);
 
     // ********* ERROR HANDLING
 
-    //  if (!emailIsValid) {
+    // if (!emailIsValid) {
     //  emailInput.style.borderColor = "#6f9ddc";
     //  emailInput.className -= "error";
     //   errormsg.innerText = "Email:";
-    //  }
+    if (emailIsValid) {
+      setIndicators(true, emailInput, emailError, emailResetMsg);
+    } else {
+      setIndicators(false, emailInput, emailError, emailErrorMsg);
+    }
+
+    //}
     // else {
     // emailInput.style.borderColor = "lightcoral";
     // emailInput.className += " error";
