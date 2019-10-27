@@ -196,15 +196,6 @@ function setIndicators(validity, element, msgElement, msg) {
 }
 
 // ==================== LISTENERS ========================================
-// =======================================================================
-// function nameListener() {
-//   // name event listener - validates on blur
-//   const nameInput = document.getElementById("name");
-
-//   nameInput.addEventListener("blur", event => {
-//     let nameIsValid = validateName();
-//   });
-// }
 
 // =======================================================================
 function emailListener() {
@@ -224,18 +215,6 @@ function emailListener() {
     }
   });
 }
-
-// =======================================================================
-// function emailBlurListener() {
-//   //   // email event listener - validates on blur
-//   const emailInput = document.getElementById("mail");
-
-//   emailInput.addEventListener("blur", event => {
-//     let email = emailInput.value;
-
-//     let emailIsValid = validateEmail();
-//   });
-// }
 
 // =======================================================================
 function tshirtListener() {
