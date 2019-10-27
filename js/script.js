@@ -1,10 +1,9 @@
 // =======================================================================
 // GLOBALS
-const submitButton = document.querySelector("[type=submit]");
+
 const colorSelect = document.getElementById("colors-js-puns");
 const otherTitle = document.getElementById("other-title");
 const idPayment = document.getElementById("payment");
-const creditCard = document.getElementById("credit-card");
 
 // =======================================================================
 function initializePage() {
@@ -13,12 +12,11 @@ function initializePage() {
   const activities = document.querySelector(".activities");
   const creditCard = 1;
 
-  // set focus to Name with jQuery
+  // set focus to Name with **jQuery**
   $("#name").focus();
 
   // set up initial appearance of the page
   otherTitle.style.display = "none";
-  // submitButton.disabled = true;
   colorSelect.style.display = "none";
   idPayment.selectedIndex = creditCard;
   paypal.className += " is-hidden";
@@ -30,7 +28,7 @@ function initializePage() {
 // =======================================================================
 function validateName() {
   const name = document.getElementById("name").value.length;
-  // name is not blank
+  // chk name is not blank
   if (name === 0) {
     return false;
   } else {
@@ -42,18 +40,9 @@ function validateName() {
 function validateEmail() {
   const email = document.getElementById("mail");
   // returns true or false
-  // \S = any char except whitespace + @ + any char + . + any char
-
-  const emailRegEx = /\S+@\S+\.\S+/;
+  // requires only "x@yy.zz" - validating email is a fool's errand
+  const emailRegEx = /\S+@\S{2,}\.\S{2,4}/;
   let emailIsValid = emailRegEx.test(String(email.value).toLowerCase());
-
-  // if (emailIsValid) {
-  //   email.style.borderColor = "#6f9ddc";
-  //   email.className -= "error";
-  // } else {
-  //   email.style.borderColor = "lightcoral";
-  //   email.className += "error";
-  // }
 
   return emailIsValid;
 }
@@ -92,12 +81,13 @@ function validateCC() {
     const ccNum = document.getElementById("cc-num");
     let ccIsValid = ccRegEx.test(String(ccNum.value));
 
+    // show validation error to user
     if (ccIsValid) {
       ccNum.style.borderColor = "#6f9ddc";
       ccNum.className -= "error";
       cardNumberError.innerText = "Card Number:";
     } else {
-      ccNum.style.borderColor = "lightcoral";
+      ccNum.style.borderColor = "red";
       ccNum.className += "error";
       cardNumberError.innerHTML = `Card Number: <span class="label-error">Enter card number</span>`;
     }
@@ -106,12 +96,13 @@ function validateCC() {
     const zip = document.getElementById("zip");
     let zipIsValid = zipRegEx.test(String(zip.value));
 
+    // show validation error to user
     if (zipIsValid) {
       zip.style.borderColor = "#6f9ddc";
       zip.className -= "error";
       zipCodeError.innerText = "Zip Code:";
     } else {
-      zip.style.borderColor = "lightcoral";
+      zip.style.borderColor = "red";
       zip.className += "error";
       zipCodeError.innerHTML = `Zip Code: <span class="label-error">Error!</span>`;
     }
@@ -119,12 +110,13 @@ function validateCC() {
     const cvv = document.getElementById("cvv");
     let cvvIsValid = cvvRegEx.test(String(cvv.value));
 
+    // show validation error to user
     if (cvvIsValid) {
       cvv.style.borderColor = "#6f9ddc";
       cvv.className -= "error";
       cvvError.innerText = "CVV:";
     } else {
-      cvv.style.borderColor = "lightcoral";
+      cvv.style.borderColor = "red";
       cvv.className += "error";
       cvvError.innerHTML = `CVV: <span class="label-error">Enter CVV</span>`;
     }
@@ -155,7 +147,7 @@ function validateForm() {
   const emailErrorMsg = `Email: <span class="label-error">Please enter a valid email</span>`;
   const emailBlankMsg = `Email: <span class="label-error">You have to type something</span>`;
 
-  // name isnt blank
+  // validate input and show error to user
   let nameIsValid = validateName();
   if (nameIsValid) {
     setIndicators(true, nameInput, nameError, nameResetMsg);
@@ -163,7 +155,7 @@ function validateForm() {
     setIndicators(false, nameInput, nameError, nameErrorMsg);
   }
 
-  // validate email
+  // validate email & not blank
   let emailIsValid = validateEmail();
   if (emailIsValid) {
     setIndicators(true, email, emailError, emailResetMsg);
@@ -174,14 +166,6 @@ function validateForm() {
       setIndicators(false, email, emailError, emailErrorMsg);
     }
   }
-
-  // EMAIL ISNT BLANK
-  // if (email.value.length === 0) { && email.value.length != 0
-  //   console.log("You didnt type nothing");
-  //   setIndicators(true, email, emailError, emailResetMsg);
-  // } else {
-  //   ;
-  // }
 
   // user has selected an activity
   let activityIsValid = validateActivity();
@@ -197,133 +181,64 @@ function validateForm() {
   }
 }
 
-// =================== ERROR INDICATORS ==================================
+// =================== ERROR INDICATOR ===================================
 // =======================================================================
 function setIndicators(validity, element, msgElement, msg) {
   if (validity === true) {
     element.style.borderColor = "#6f9ddc";
-    // element.className -= "error";
     element.classList.remove("error");
     msgElement.innerHTML = msg;
   } else {
-    element.style.borderColor = "lightcoral";
-    // element.className += "error";
+    element.style.borderColor = "red";
     element.classList.add("error");
-    msgElement.innerHTML = msg; // <-- THIS LINE CAUSES ERROR. Why tho?
+    msgElement.innerHTML = msg;
   }
 }
 
-// A different function
-//       inputs would need
-//           error message (declare global)
-//           handle for the label for error mesg
-//           handle for the input
-//            validity flag
-
-//       Activities andmt Info need
-//           handle of error label
-//           pass error msg (declare global)
-
 // ==================== LISTENERS ========================================
 // =======================================================================
-function nameListener() {
-  // name event listener - validates on blur
-  const nameInput = document.getElementById("name");
-  const nameError = document.querySelector("[for=name]");
-  const resetMsg = "Name:";
-  const errorMsg = `Name: <span class="label-error"> * * * Please enter a name * * * </span>`;
+// function nameListener() {
+//   // name event listener - validates on blur
+//   const nameInput = document.getElementById("name");
 
-  nameInput.addEventListener("blur", event => {
-    let nameIsValid = validateName();
-
-    // if (nameIsValid) {
-    //   setIndicators(true, event.target, nameError, resetMsg);
-    // } else {
-    //   setIndicators(false, event.target, nameError, errorMsg);
-    // }
-
-    // ******** ERROR HANDLING ************
-    // if (nameIsValid || name === "") {
-    //   nameInput.style.borderColor = "#6f9ddc";
-    //   nameInput.className -= "error";
-    //   errormsg.innerText = "Name:";
-    // } else {
-    //   nameInput.style.borderColor = "lightcoral";
-    //   nameInput.className += " error";
-    //   errormsg.innerHTML =
-    //     "Name: <span class='label-error'> * * * Please enter a name * * * </span>";
-    // }
-  });
-}
+//   nameInput.addEventListener("blur", event => {
+//     let nameIsValid = validateName();
+//   });
+// }
 
 // =======================================================================
 function emailListener() {
   // email event listener - live validation
   const emailInput = document.getElementById("mail");
-
   const emailError = document.querySelector("[for=mail]");
-  const email = document.getElementById("mail");
-  // const emailError = document.querySelector("[for=mail]");
   const emailResetMsg = "Email:";
   const emailErrorMsg = `Email: <span class="label-error">Please enter a valid email</span>`;
 
-  emailInput.addEventListener("keyup", event => {
+  emailInput.addEventListener("keyup", () => {
     let emailIsValid = validateEmail();
-    console.log(emailIsValid);
 
-    // ********* ERROR HANDLING
-
-    // if (!emailIsValid) {
-    //  emailInput.style.borderColor = "#6f9ddc";
-    //  emailInput.className -= "error";
-    //   errormsg.innerText = "Email:";
     if (emailIsValid) {
       setIndicators(true, emailInput, emailError, emailResetMsg);
     } else {
       setIndicators(false, emailInput, emailError, emailErrorMsg);
     }
-
-    //}
-    // else {
-    // emailInput.style.borderColor = "lightcoral";
-    // emailInput.className += " error";
-
-    //   errormsg.innerHTML =
-    //      "Email: <span class='label-error'> * * * Must be a valid email address * * * </span>";
-    //  }
   });
 }
 
 // =======================================================================
-function emailBlurListener() {
-  //   // email event listener - validates on blur
-  const emailInput = document.getElementById("mail");
-  // const errormsg = document.querySelector("[for=mail]");
+// function emailBlurListener() {
+//   //   // email event listener - validates on blur
+//   const emailInput = document.getElementById("mail");
 
-  emailInput.addEventListener("blur", event => {
-    let email = emailInput.value;
+//   emailInput.addEventListener("blur", event => {
+//     let email = emailInput.value;
 
-    let emailIsValid = validateEmail();
-    // if (emailIsValid) {
-    // emailInput.style.borderColor = "#6f9ddc";
-    // emailInput.className -= "error";
-    // errormsg.innerText = "Email:";
-    // } else {
-    //       emailInput.style.borderColor = "lightcoral";
-    //       emailInput.className += " error";
-    //        errormsg.innerHTML= "Email: <span class='label-error'> * * * Must be a valid email address * * * </span>";
-    // }
-
-    //     if (email === "") {
-    //       errormsg.innerHTML =
-    //         "Email: <span class='label-error'> * * * Email address can't be empty * * * </span>";
-    //
-    //     }
-  });
-}
+//     let emailIsValid = validateEmail();
+//   });
+// }
 
 // =======================================================================
-function selectListener() {
+function tshirtListener() {
   // sets up t-shirt options
   const selectItem = document.getElementById("design");
   const PUNS = 1,
@@ -331,12 +246,11 @@ function selectListener() {
     CORNFLOWER = 0,
     TOMATO = 3;
 
-  selectItem.addEventListener("change", event => {
+  selectItem.addEventListener("change", () => {
     let chosenItem = selectItem.options[selectItem.selectedIndex].index;
 
     if (chosenItem === PUNS) {
-      // JS Puns chosen
-      // show the dropdown
+      // JS Puns chosen - show the dropdown
       colorSelect.style.display = "inline-block";
       document.getElementById("color").selectedIndex = CORNFLOWER;
 
@@ -394,11 +308,10 @@ function checkboxListener() {
   const checkState = document.querySelectorAll("input");
   let totalCost = 0;
 
-  // *************** COST *************************************
-
+  //                                      COST
   // put event handlers on every checkbox
   for (let i = 0; i < checkState.length; i++) {
-    checkState[i].addEventListener("click", event => {
+    checkState[i].addEventListener("click", () => {
       // grab the cost
       const costString = document
         .getElementsByTagName("input")
@@ -417,7 +330,7 @@ function checkboxListener() {
       // drop the amount into the DOM
       document.getElementById("total").innerHTML = `Total: $${totalCost}`;
 
-      // SCHEDULE CONFLICT ********************************************
+      //                       SCHEDULE CONFLICT
       // get scheduled time
       const timeString = document
         .getElementsByTagName("input")
@@ -444,6 +357,10 @@ function checkboxListener() {
 
 // =======================================================================
 function ccListener() {
+  const creditCard = document.getElementById("credit-card");
+  const errormsg = document.getElementById("payment").previousElementSibling
+    .previousElementSibling;
+
   // display appropriate payment method
   const SPM = 0,
     CC = 1,
@@ -463,11 +380,13 @@ function ccListener() {
       creditCard.classList.add("is-hidden");
       paypal.classList.remove("is-hidden");
       bitcoin.classList.add("is-hidden");
+      errormsg.innerHTML = `Payment Info`;
     } else if (chosenItem === BC) {
       // bitcoin
       creditCard.classList.add("is-hidden");
       paypal.classList.add("is-hidden");
       bitcoin.classList.remove("is-hidden");
+      errormsg.innerHTML = `Payment Info`;
     } else if (chosenItem === SPM) {
       idPayment.selectedIndex = CC;
       creditCard.classList.remove("is-hidden");
@@ -478,16 +397,12 @@ function ccListener() {
 }
 
 // =======================================================================
-
 function submitButtonListener() {
+  const submitButton = document.querySelector("[type=submit]");
   // validate form before allowing submission
 
-  submitButton.addEventListener("click", function(event) {
+  submitButton.addEventListener("click", event => {
     let formIsValid = validateForm();
-
-    // *******************************
-    //    event.preventDefault();
-    // *******************************
 
     if (formIsValid) {
       //allow submit by doing nothing
@@ -504,10 +419,8 @@ function main() {
   initializePage();
 
   // listeners
-  nameListener();
   emailListener();
-  emailBlurListener();
-  selectListener();
+  tshirtListener();
   jobRoleListener();
   ccListener();
   checkboxListener();
